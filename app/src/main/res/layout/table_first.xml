@@ -7,7 +7,8 @@
     <Button
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:onClick="onCLickAlarm" />
 
     <LinearLayout
         android:layout_width="400dp"
@@ -31,6 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:onClick="onClickEvent"
                 android:text="Ivents" />
         </LinearLayout>
 
@@ -50,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:onClick="onClickStartAllHeroes"
                 android:text="All heroes" />
 
         </LinearLayout>

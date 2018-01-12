@@ -4,25 +4,31 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/idButtSend"
-        android:layout_width="100dp"
+        android:id="@+id/idButtSendMyChat"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:onClick="onClickAddPost"
+        android:onClick="onClickAddPostMyChat"
         android:text="send" />
 
     <EditText
-        android:id="@+id/idTextMessege"
+        android:id="@+id/idTextMessegeMyChat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/idButtSend" />
+        android:layout_below="@+id/idButtSendMyChat" />
 
     <ListView
-        android:id="@+id/idListViewMessege"
+        android:id="@+id/idListViewMessegeMyChat"
         android:layout_width="match_parent"
         android:layout_height="450dp"
-        android:layout_below="@+id/idTextMessege"
+        android:layout_below="@+id/idTextMessegeMyChat"
         android:scrollbars="vertical"></ListView>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idListViewMessegeMyChat"
+        android:onClick="onCLickLeaveMyRoom"
+        android:text="LEAVE" />
 
 </RelativeLayout>

@@ -7,8 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -22,9 +25,14 @@ import java.util.Map;
 
 public class RegistrTable extends AppCompatActivity {
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Person");
+    String maxIdHero;
+    DatabaseReference mDatabaseHeroIdMax = FirebaseDatabase.getInstance().getReference("AllHeroes/idMaxHeroes");
+    DatabaseReference mDatabaseHero = FirebaseDatabase.getInstance().getReference("AllHeroes/idHeroes");
+
 
     FileOutputStream fileNumber;
     FileOutputStream fileNumber2;
+    FileOutputStream fileNumber3;
 
     EditText name;
     EditText nickname;
@@ -34,6 +42,18 @@ public class RegistrTable extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registr_table);
+
+        mDatabaseHeroIdMax.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                maxIdHero = dataSnapshot.getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
@@ -55,6 +75,24 @@ public class RegistrTable extends AppCompatActivity {
         } finally {
             try {
                 fileNumber.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        try {
+            fileNumber3 = openFileOutput("nickname.txt", MODE_PRIVATE);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            fileNumber3.write(nickname.getText().toString().getBytes());
+        } catch (IOException e) {
+
+        } finally {
+            try {
+                fileNumber3.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -91,6 +129,19 @@ public class RegistrTable extends AppCompatActivity {
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(name, postValues);
         mDatabase.updateChildren(childUpdates);
+        addNewHeroID(this.nickname.getText().toString());
+        maxIdHero = String.valueOf(Integer.valueOf(maxIdHero) + 1);
+
+        mDatabaseHeroIdMax.setValue(maxIdHero);
         startActivity(new Intent(this, MainActivity.class));
+
+    }
+
+    public void addNewHeroID(String nickname) {
+        mDatabaseHero.child(maxIdHero).push();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(maxIdHero, nickname);
+        mDatabaseHero.updateChildren(childUpdates);
     }
 }

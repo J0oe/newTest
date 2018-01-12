@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Person");
     EditText nameEdit;
     EditText passEdit;
 
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -82,13 +80,35 @@ public class MainActivity extends AppCompatActivity {
             passEdit = findViewById(R.id.textPasswordId);
             passEdit.setText(passPersonReg);
         }
+        DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference("Person/" + nameEdit.getText().toString() + "/password");
 
+        mDatabase2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
+                try {
+                    String date = dataSnapshot.getValue().toString();
+                    if (date.equals(passEdit.getText().toString()))
+                        startService(new Intent(getApplicationContext(), ServiceMess.class));
+                    finish();
+
+                    startActivity(new Intent(getApplicationContext(), WorkerRoom.class));
+                } catch (Throwable throwable) {
+                    Toast.makeText(getApplicationContext(), "Wrong login or pass", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
     public void onCLickStart(View view) {
-
+        nameEdit = findViewById(R.id.texntNameId);
+        passEdit = findViewById(R.id.textPasswordId);
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Person/" + nameEdit.getText().toString() + "/password");
 
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -98,11 +118,14 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     String date = dataSnapshot.getValue().toString();
                     if (date.equals(passEdit.getText().toString()))
-                        startActivity(new Intent(getApplicationContext(), WorkerRoom.class));
+                        startService(new Intent(getApplicationContext(), ServiceMess.class));
+
+                    startActivity(new Intent(getApplicationContext(), WorkerRoom.class));
                 } catch (Throwable throwable) {
                     Toast.makeText(getApplicationContext(), "Wrong login or pass", Toast.LENGTH_LONG).show();
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 

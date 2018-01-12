@@ -1,31 +1,29 @@
 package com.ex.admin.databclass;
 
+/**
+ * Created by Admin on 09.01.2018.
+ */
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
 @IgnoreExtraProperties
-public class Post {
+public class AddNewHero {
 
-
-    public String post;
     public String nickname;
-    public Integer idPost;
 
 
     public Map<String, Boolean> stars = new HashMap<>();
 
-    public Post() {
+    public AddNewHero() {
     }
 
-    public Post(String nickname, String post, Integer id) {
+    public AddNewHero(String nickname) {
 
-        this.post = post;
         this.nickname = nickname;
-        this.idPost = id;
     }
 
     @Exclude
@@ -33,8 +31,9 @@ public class Post {
         HashMap<String, Object> result = new HashMap<>();
 
 
-        result.put("post", post);
+        result.put("nickname", nickname);
 
         return result;
     }
+
 }
